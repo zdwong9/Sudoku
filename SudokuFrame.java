@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+
 import java.util.List;
 import javax.swing.border.Border;
 
@@ -14,15 +15,23 @@ public class SudokuFrame extends JFrame implements ActionListener {
     JButton solveButton;
     JButton clearButton;
     JTextField[][] grid = new JTextField[9][9];
+    List<String> numbers = new ArrayList<>();
+    {
+        for (char c = '1'; c <= '9'; c++) {
+            numbers.add(c + "");
+        }
+    }
 
     public void initaliseButtons() {
         buttonPanel = new JPanel();
 
         solveButton = new JButton();
         solveButton.setText("Solve");
+        solveButton.addActionListener(this);
 
         clearButton = new JButton();
         clearButton.setText("Clear");
+        clearButton.addActionListener(this);
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(9, 9));
@@ -49,6 +58,14 @@ public class SudokuFrame extends JFrame implements ActionListener {
                 }
                 grid[i][j].setFont(new Font("Consolas", Font.BOLD, 50));
                 grid[i][j].setHorizontalAlignment(JTextField.CENTER);
+                grid[i][j].addKeyListener(new KeyAdapter() {
+                    public void keyTyped(KeyEvent e) {
+                        char c = e.getKeyChar();
+                        if (((c < '1') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+                            e.consume(); // ignore event
+                        }
+                    }
+                });
                 mainPanel.add(grid[i][j]);
             }
         }
@@ -57,7 +74,6 @@ public class SudokuFrame extends JFrame implements ActionListener {
         buttonPanel.add(clearButton);
         buttonPanel.add(solveButton);
         this.add(buttonPanel, BorderLayout.SOUTH);
-
     }
 
     public SudokuFrame() {
@@ -75,16 +91,49 @@ public class SudokuFrame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    public void clearGrid() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                grid[i][j].setText("");
+            }
+        }
+    }
+
+    public void makeGridEditable() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                grid[i][j].setEditable(true);
+            }
+        }
+    }
+
+    public void fixAndCheckGrid() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                grid[i][j].setEditable(false);
+                if (!numbers.contains(grid[i][j].getText())) {
+                    JOptionPane.showMessageDialog(this, "Invalid grid ah sial", "Invalid Grid",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    makeGridEditable();
+                    return;
+                }
+            }
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
-        // if (e.getSource() == button && textField.getText().equals("Correct")) {
-        // JOptionPane.showMessageDialog(null, textField.getText());
-        // } else {
-        // JOptionPane.showMessageDialog(null, "Type Wrong liao");
-        // button.setEnabled(false);
-        // textField.setEditable(false);
-        // }
+        if (e.getSource() == solveButton) {
+            JOptionPane.showMessageDialog(this, "Solving...", "Solve?", JOptionPane.INFORMATION_MESSAGE);
+            fixAndCheckGrid();
+            // solveGrid();
+
+        } else if (e.getSource() == clearButton) {
+            JOptionPane.showMessageDialog(this, "Clearing...", "Clear?", JOptionPane.INFORMATION_MESSAGE);
+            clearGrid();
+
+        }
     }
 
     public static void main(String[] args) {
