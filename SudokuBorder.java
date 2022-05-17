@@ -28,61 +28,31 @@ public class SudokuBorder extends AbstractBorder {
             g2d.setColor(Color.gray);
             x = 0;
             y = 0;
+            // Top Border
+            g2d.draw(new Line2D.Double((double) x, (double) y, (double) width, (double) y));
+
+            // Left Border
+            g2d.draw(new Line2D.Double((double) x, (double) y, (double) x, (double) height));
+            g2d.setColor(Color.RED);
+
             if (borderEnum == BorderEnum.RIGHT && both == false) {
-                // // Top Border
-                // g2d.draw(new Line2D.Double((double) x, (double) y, (double) width, (double)
-                // y));
-
-                // // Left Border
-                // g2d.draw(new Line2D.Double((double) x, (double) y, (double) x, (double)
-                // height));
-
-                g2d.setColor(Color.green);
 
                 // Right Border
                 g2d.draw(new Line2D.Double((double) width - 1, (double) 0, (double) width - 1,
                         (double) height));
 
+            } else if (borderEnum == BorderEnum.BOTTOM && both == false) {
+                g2d.draw(new Line2D.Double((double) 0, (double) height - 1, (double) width,
+                        (double) height - 1));
+
+            } else if (both == true) {
+                g2d.draw(new Line2D.Double((double) 0, (double) height - 1, (double) width,
+                        (double) height - 1));
+                g2d.draw(new Line2D.Double((double) width - 1, (double) 0, (double) width - 1,
+                        (double) height));
+
             }
-            // g2d.draw(new Line2D.Double((double) 0, (double) 0, (double) width, (double)
-            // 0));
-
-            // if (borderEnum == BorderEnum.RIGHT && both == false) {
-            // // Bottom Border
-            // g2d.draw(new Line2D.Double((double) x, (double) height, (double) x,
-            // (double) width + height));
-
-            // g2d.setColor(Color.RED);
-
-            // // Right Border
-            // g2d.draw(new Line2D.Double((double) width * 2, (double) y, (double) width +
-            // height,
-            // (double) y));
-            // } else if (borderEnum == BorderEnum.BOTTOM && both == false) {
-            // // Right Border
-            // g2d.draw(new Line2D.Double((double) width, (double) y, (double) width,
-            // (double) height));
-
-            // g2d.setColor(Color.RED);
-
-            // // Bottom Border
-            // g2d.draw(new Line2D.Double((double) height, (double) y, (double) height,
-            // (double) width));
-
-            // } else {
-            // if (both == true) {
-            // g2d.setColor(Color.RED);
-            // }
-
-            // // Right Border
-            // g2d.draw(new Line2D.Double((double) width, (double) y, (double) width,
-            // (double) height));
-
-            // // Bottom Border
-            // g2d.draw(new Line2D.Double((double) height, (double) y, (double) height,
-            // (double) width));
-
-            // }
+            
 
         }
     }

@@ -33,20 +33,8 @@ public class SudokuFrame extends JFrame implements ActionListener {
                 int rightBorder = 0;
                 int bottomBorder = 0;
 
-                // if (rightBorder == 0 && bottomBorder == 0) {
-                // // grid[i][j].setBorder(BorderFactory.create(1, 1, 1, 1, Color.gray));
-                // grid[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));
-                // } else {
-                // grid[i][j].setBorder(BorderFactory.createMatteBorder(1, 1, bottomBorder,
-                // rightBorder, Color.black));
-                // }
                 if (i % 3 == 2 || j % 3 == 2) {
-                    // Border insidBorder = BorderFactory.createMatteBorder(1, 1, bottomBorder,
-                    // rightBorder,
-                    // Color.gray);
-                    // Border outsiBorder = BorderFactory.createMatteBorder(1, 1, bottomBorder,
-                    // rightBorder, Color.red);
-                    // CompoundBorder border = new CompoundBorder(insidBorder, outsiBorder);
+
                     Border border = null;
                     if (i % 3 == 2 && j % 3 == 2) {
                         border = new SudokuBorder(BorderEnum.RIGHT, BorderEnum.BOTTOM);
