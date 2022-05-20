@@ -8,8 +8,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Double;
 
 public class SudokuBorder extends AbstractBorder {
-    boolean both;
-    BorderEnum borderEnum;
+    private boolean both;
+    private BorderEnum borderEnum;
 
     public SudokuBorder(BorderEnum... be) {
         if (be.length > 1) {
@@ -52,7 +52,6 @@ public class SudokuBorder extends AbstractBorder {
                         (double) height));
 
             }
-            
 
         }
     }

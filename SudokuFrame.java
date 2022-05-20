@@ -4,22 +4,23 @@ import java.awt.geom.Line2D.*;
 import java.util.ArrayList;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.*;
+import java.util.concurrent.TimeUnit;
 
-import java.util.List;
 import javax.swing.border.Border;
 
 public class SudokuFrame extends JFrame implements ActionListener {
-    JPanel mainPanel;
-    JPanel buttonPanel;
-    JButton solveButton;
-    JButton clearButton;
-    JTextField[][] grid = new JTextField[9][9];
-    List<String> numbers = new ArrayList<>();
-    {
-        for (char c = '1'; c <= '9'; c++) {
-            numbers.add(c + "");
-        }
+    private JPanel mainPanel;
+    private JPanel buttonPanel;
+    private JButton solveButton;
+    private JButton clearButton;
+    private JTextField[][] grid = new JTextField[9][9];
+
+    public JTextField[][] getGrid() {
+        return grid;
+    }
+
+    public JPanel getPanel() {
+        return mainPanel;
     }
 
     public void initaliseButtons() {
@@ -35,13 +36,21 @@ public class SudokuFrame extends JFrame implements ActionListener {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(9, 9));
+
+        initaliseGrid();
+
+        this.add(mainPanel);
+
+        buttonPanel.add(clearButton);
+        buttonPanel.add(solveButton);
+        this.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    public void initaliseGrid() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                grid[i][j] = new JTextField();
+                grid[i][j] = new JTextField("");
                 grid[i][j].setLayout(new GridLayout(1, 1));
-                int rightBorder = 0;
-                int bottomBorder = 0;
-
                 if (i % 3 == 2 || j % 3 == 2) {
 
                     Border border = null;
@@ -69,11 +78,6 @@ public class SudokuFrame extends JFrame implements ActionListener {
                 mainPanel.add(grid[i][j]);
             }
         }
-        this.add(mainPanel);
-
-        buttonPanel.add(clearButton);
-        buttonPanel.add(solveButton);
-        this.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public SudokuFrame() {
@@ -91,47 +95,48 @@ public class SudokuFrame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    public void clearGrid() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                grid[i][j].setText("");
-            }
-        }
-    }
-
-    public void makeGridEditable() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                grid[i][j].setEditable(true);
-            }
-        }
-    }
-
-    public void fixAndCheckGrid() {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                grid[i][j].setEditable(false);
-                if (!numbers.contains(grid[i][j].getText())) {
-                    JOptionPane.showMessageDialog(this, "Invalid grid ah sial", "Invalid Grid",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    makeGridEditable();
-                    return;
-                }
-            }
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
         if (e.getSource() == solveButton) {
             JOptionPane.showMessageDialog(this, "Solving...", "Solve?", JOptionPane.INFORMATION_MESSAGE);
-            fixAndCheckGrid();
-            // solveGrid();
+            try {
+
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            if (!SudokuHelper.fixAndCheckGrid(this)) {
+                return;
+            }
+
+            String[][] oldGrid = SudokuHelper.saveGrid(grid);
+
+            try {
+
+                SudokuHelper.solveGrid(this);
+                JOptionPane.showMessageDialog(this, "Solved your puzzle YAY...", "Solved",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (UnsolveablePuzzleException exception) {
+                JOptionPane.showMessageDialog(null, "Cant solve your puzzle.\nPlease enter a new puzzle",
+                        "Invalid Board", JOptionPane.INFORMATION_MESSAGE);
+
+                SudokuHelper.revertGrid(oldGrid, grid);
+                SudokuHelper.makeGridEditable(this);
+            }
 
         } else if (e.getSource() == clearButton) {
             JOptionPane.showMessageDialog(this, "Clearing...", "Clear?", JOptionPane.INFORMATION_MESSAGE);
-            clearGrid();
+            try {
+
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+            SudokuHelper.clearGrid(this);
+            SudokuHelper.makeGridEditable(this);
 
         }
     }
