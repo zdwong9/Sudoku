@@ -28,18 +28,59 @@ public class SudokuHelper {
         }
     }
 
+    public static boolean checkValid(JTextField[][] grid, int column, int row, int number) {
+        for (int i = 0; i < 9; i++) {
+
+            if (i != column && !grid[row][i].getText().equals("")) {
+                if (number == Integer.parseInt(grid[row][i].getText())) {
+                    return false;
+                }
+            }
+        }
+
+        for (int i = 0; i < 9; i++) {
+            if (i != row && !grid[i][column].getText().equals("")) {
+                if (number == Integer.parseInt(grid[i][column].getText())) {
+                    return false;
+                }
+            }
+        }
+
+        int rowDisplacement = row % 3;
+        int columnDisplacement = column % 3;
+        for (int i = rowDisplacement; i < rowDisplacement + 3; i++) {
+            for (int j = columnDisplacement; j < columnDisplacement + 3; j++) {
+                if (i != row && j != column && !grid[i][j].getText().equals("")) {
+                    if (number == Integer.parseInt(grid[i][j].getText())) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkGrid(SudokuFrame sudokuFrame) {
+        JTextField[][] grid = sudokuFrame.getGrid();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (!grid[i][j].getText().equals("")
+                        && !checkValid(grid, j, i, Integer.parseInt(grid[i][j].getText()))) {
+
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public static boolean fixAndCheckGrid(SudokuFrame sudokuFrame) {
         JTextField[][] grid = sudokuFrame.getGrid();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                System.out.println("hehe " + i + " " + j);
                 grid[i][j].setEditable(false);
-                if ((!grid[i][j].getText().equals("") && !NUMBERS.contains(grid[i][j].getText()))
-                        || !isvalidplacement(grid, j, i, Integer.parseInt(grid[i][j].getText()))) {
+                if (!grid[i][j].getText().equals("") && !NUMBERS.contains(grid[i][j].getText())) {
 
-                    JOptionPane.showMessageDialog(null, "Invalid grid ah sial", "Invalid Grid",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    SudokuHelper.makeGridEditable(sudokuFrame);
                     return false;
                 }
             }
@@ -139,6 +180,13 @@ public class SudokuHelper {
                     for (int numbertotry = 1; numbertotry <= 9; numbertotry++) {
                         if (isvalidplacement(grid, colummn, row, numbertotry)) {
                             grid[row][colummn].setText(numbertotry + "");
+                            try {
+
+                                TimeUnit.SECONDS.sleep(1);
+                            } catch (InterruptedException ex) {
+                                Thread.currentThread().interrupt();
+                            }
+                            grid[row][colummn].repaint();
 
                             if (solveGrid(sudokuFrame)) {
                                 return true;

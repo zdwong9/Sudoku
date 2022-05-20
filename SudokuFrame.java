@@ -107,19 +107,20 @@ public class SudokuFrame extends JFrame implements ActionListener {
                 Thread.currentThread().interrupt();
             }
 
-            if (!SudokuHelper.fixAndCheckGrid(this)) {
+            if (!SudokuHelper.fixAndCheckGrid(this) || !SudokuHelper.checkGrid(this)) {
+                JOptionPane.showMessageDialog(null, "Invalid grid ah sial", "Invalid Grid",
+                        JOptionPane.INFORMATION_MESSAGE);
+                SudokuHelper.makeGridEditable(this);
                 return;
             }
 
             String[][] oldGrid = SudokuHelper.saveGrid(grid);
 
-            try {
-
-                SudokuHelper.solveGrid(this);
+            if (SudokuHelper.solveGrid(this)) {
                 JOptionPane.showMessageDialog(this, "Solved your puzzle YAY...", "Solved",
                         JOptionPane.INFORMATION_MESSAGE);
 
-            } catch (UnsolveablePuzzleException exception) {
+            } else {
                 JOptionPane.showMessageDialog(null, "Cant solve your puzzle.\nPlease enter a new puzzle",
                         "Invalid Board", JOptionPane.INFORMATION_MESSAGE);
 
@@ -143,5 +144,6 @@ public class SudokuFrame extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         new SudokuFrame();
+        
     }
 }
