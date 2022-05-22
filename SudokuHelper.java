@@ -46,8 +46,9 @@ public class SudokuHelper {
             }
         }
 
-        int rowDisplacement = row % 3;
-        int columnDisplacement = column % 3;
+        int rowDisplacement = (row / 3) * 3;
+        int columnDisplacement = (column / 3) * 3;
+        System.out.println(rowDisplacement + " " + columnDisplacement);
         for (int i = rowDisplacement; i < rowDisplacement + 3; i++) {
             for (int j = columnDisplacement; j < columnDisplacement + 3; j++) {
                 if (i != row && j != column && !grid[i][j].getText().equals("")) {
@@ -68,6 +69,7 @@ public class SudokuHelper {
                         && !checkValid(grid, j, i, Integer.parseInt(grid[i][j].getText()))) {
 
                     return false;
+
                 }
             }
         }
@@ -170,6 +172,7 @@ public class SudokuHelper {
 
     public static boolean solveGrid(SudokuFrame sudokuFrame) {
         JTextField[][] grid = sudokuFrame.getGrid();
+        System.out.println("Solving" + ++count);
         for (int row = 0; row < 9; row++) {
             for (int colummn = 0; colummn < 9; colummn++) {
                 int currentNumber = 0;

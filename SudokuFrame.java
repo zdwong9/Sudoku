@@ -111,7 +111,6 @@ public class SudokuFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Invalid grid ah sial", "Invalid Grid",
                         JOptionPane.INFORMATION_MESSAGE);
                 SudokuHelper.makeGridEditable(this);
-                System.out.println("okoko");
                 return;
             }
 
