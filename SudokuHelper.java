@@ -183,12 +183,9 @@ public class SudokuHelper {
                     for (int numbertotry = 1; numbertotry <= 9; numbertotry++) {
                         if (isvalidplacement(grid, colummn, row, numbertotry)) {
                             grid[row][colummn].setText(numbertotry + "");
-                            try {
-
-                                TimeUnit.SECONDS.sleep(1);
-                            } catch (InterruptedException ex) {
-                                Thread.currentThread().interrupt();
-                            }
+                            sudokuFrame.invalidate();
+                            sudokuFrame.repaint();
+                            grid[row][colummn].invalidate();
                             grid[row][colummn].repaint();
 
                             if (solveGrid(sudokuFrame)) {
