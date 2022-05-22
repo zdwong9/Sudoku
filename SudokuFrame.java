@@ -100,12 +100,12 @@ public class SudokuFrame extends JFrame implements ActionListener {
         // TODO Auto-generated method stub
         if (e.getSource() == solveButton) {
             JOptionPane.showMessageDialog(this, "Solving...", "Solve?", JOptionPane.INFORMATION_MESSAGE);
-            try {
+            // try {
 
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
+            //     TimeUnit.SECONDS.sleep(1);
+            // } catch (InterruptedException ex) {
+            //     Thread.currentThread().interrupt();
+            // }
 
             if (!SudokuHelper.fixAndCheckGrid(this) || !SudokuHelper.checkGrid(this)) {
                 JOptionPane.showMessageDialog(null, "Invalid grid ah sial", "Invalid Grid",
@@ -130,12 +130,7 @@ public class SudokuFrame extends JFrame implements ActionListener {
 
         } else if (e.getSource() == clearButton) {
             JOptionPane.showMessageDialog(this, "Clearing...", "Clear?", JOptionPane.INFORMATION_MESSAGE);
-            try {
-
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
+            
             SudokuHelper.clearGrid(this);
             SudokuHelper.makeGridEditable(this);
 
